@@ -1,0 +1,338 @@
+/* =========================================================================
+   India Postal Service Portal — Animation & Motif Layer
+   Theme: "Sorting & Stamping" — every motion borrows from a real postal
+   artifact: rubber postmarks, perforated stamp sheets, airmail routes,
+   sorting-office split-flap boards. Loads after the base stylesheet and
+   does not require any change to the original search/data logic.
+   ========================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil:wght@700;900&family=Space+Mono:wght@400;700&display=swap');
+
+:root{
+  --page-bg: #fef2f2;        /* matches bg-red-50 */
+  --paper: #fffaf0;
+  --ink-navy: #16213e;
+  --saffron: #ff9933;
+  --india-green: #128807;
+  --gold: #c9a14a;
+  --card-shadow: 0 10px 30px -12px rgba(220,38,38,.35);
+}
+.dark-mode{
+  --page-bg: #111827;
+  --paper: #232b3a;
+  --card-shadow: 0 10px 30px -10px rgba(0,0,0,.6);
+}
+
+/* ---------- Typography roles ---------- */
+.font-stencil{
+  font-family: "Big Shoulders Stencil", "Arial Narrow", sans-serif;
+  letter-spacing: .01em;
+}
+.font-mono-data{
+  font-family: "Space Mono", ui-monospace, monospace;
+}
+
+/* =========================================================================
+   HEADER — quiet supporting motion: soft entrance + perforated hem
+   ========================================================================= */
+header{ position: relative; overflow: visible; }
+header h1{ font-family: "Big Shoulders Stencil","Arial Narrow",sans-serif; letter-spacing:.02em; }
+
+header::after{
+  content:"";
+  position:absolute; left:0; right:0; bottom:-7px; height:14px;
+  background-image: radial-gradient(circle 6px, var(--page-bg) 6px, transparent 6.4px);
+  background-size: 18px 100%;
+  background-repeat: repeat-x;
+  pointer-events:none;
+}
+
+@media (prefers-reduced-motion: no-preference){
+  header h1, header p{
+    animation: headerRise .7s cubic-bezier(.22,1,.36,1) both;
+  }
+  header p{ animation-delay: .08s; }
+  #darkModeBtn{ animation: headerRise .7s cubic-bezier(.22,1,.36,1) both; animation-delay:.12s; }
+}
+@keyframes headerRise{
+  from{ opacity:0; transform: translateY(-10px); }
+  to{ opacity:1; transform: translateY(0); }
+}
+
+#darkModeBtn{ transition: transform .35s cubic-bezier(.34,1.56,.64,1), box-shadow .25s ease; }
+#darkModeBtn:hover{ transform: translateY(-2px) rotate(-4deg); box-shadow: 0 8px 18px -6px rgba(0,0,0,.35); }
+#darkModeBtn:active{ transform: scale(.92) rotate(0deg); }
+
+/* =========================================================================
+   HERO — the signature element: the whole message sits inside one giant
+   postage stamp (perforated on all four edges, corner marks, postmark
+   entrance).
+   ========================================================================= */
+.hero-stamp-section{ position:relative; }
+
+.stamp-frame{
+  position:relative;
+  max-width: 760px;
+  width:100%;
+  background: rgba(255,255,255,.13);
+  backdrop-filter: blur(2px);
+  border: 2px dashed rgba(255,255,255,.65);
+  border-radius: 6px;
+  padding: 2.75rem 2rem 2.25rem;
+  margin: .5rem auto 1.25rem;
+}
+
+/* perforation — top & bottom (horizontal rows of punched holes) */
+.stamp-frame::before,
+.stamp-frame::after{
+  content:"";
+  position:absolute; left:10px; right:10px; height:16px;
+  background-image: radial-gradient(circle 7px, var(--page-bg) 7px, transparent 7.4px);
+  background-size: 20px 100%;
+  background-repeat: repeat-x;
+  pointer-events:none;
+}
+.stamp-frame::before{ top:-8px; }
+.stamp-frame::after{ bottom:-8px; }
+
+/* perforation — left & right (vertical rows), via pseudo elements on a wrapper */
+.stamp-frame .perf-side{
+  position:absolute; top:10px; bottom:10px; width:16px;
+  background-image: radial-gradient(circle 7px, var(--page-bg) 7px, transparent 7.4px);
+  background-size: 100% 20px;
+  background-repeat: repeat-y;
+  pointer-events:none;
+}
+.stamp-frame .perf-side.left{ left:-8px; }
+.stamp-frame .perf-side.right{ right:-8px; }
+
+.stamp-corner{
+  position:absolute;
+  font-size:.62rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  opacity:.85;
+  font-weight:700;
+}
+.stamp-corner-tl{ top:.6rem; left:.9rem; }
+.stamp-corner-tr{ top:.6rem; right:.9rem; }
+.stamp-corner-bl{ bottom:.6rem; left:.9rem; }
+.stamp-corner-br{ bottom:.6rem; right:.9rem; letter-spacing:.3em; }
+
+.hero-stamp-text{ font-family:"Big Shoulders Stencil","Arial Narrow",sans-serif; }
+
+@media (prefers-reduced-motion: no-preference){
+  .stamp-frame{
+    animation: stampPress .85s cubic-bezier(.22,1.15,.4,1) both;
+    transform-origin: center;
+  }
+  .hero-stamp-sub{ animation: fadeUp .6s ease .35s both; }
+  .stamp-corner{ animation: fadeUp .5s ease both; }
+  .stamp-corner-tl{ animation-delay:.5s; }
+  .stamp-corner-tr{ animation-delay:.58s; }
+  .stamp-corner-bl{ animation-delay:.66s; }
+  .stamp-corner-br{ animation-delay:.74s; }
+}
+@keyframes stampPress{
+  0%{ opacity:0; transform: scale(1.5) rotate(-7deg); filter: blur(3px); }
+  60%{ opacity:1; transform: scale(.96) rotate(2deg); filter: blur(0); }
+  80%{ transform: scale(1.02) rotate(-.6deg); }
+  100%{ transform: scale(1) rotate(0deg); }
+}
+@keyframes fadeUp{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+
+/* =========================================================================
+   STAT CARDS — split-flap / odometer digits
+   ========================================================================= */
+.stat-card{
+  opacity:0; transform: translateY(18px);
+  transition: opacity .55s ease, transform .55s cubic-bezier(.22,1,.36,1);
+}
+.stat-card.in-view{ opacity:1; transform:translateY(0); }
+
+.digit-reel{
+  display:inline-flex;
+  font-family:"Space Mono", ui-monospace, monospace;
+}
+.digit-slot{
+  position:relative;
+  display:inline-block;
+  width:1ch;
+  height:1.2em;
+  overflow:hidden;
+  vertical-align:bottom;
+}
+.digit-slot .strip{
+  position:absolute; left:0; top:0;
+  display:flex; flex-direction:column;
+  transition: transform .65s cubic-bezier(.2,.9,.25,1);
+}
+.digit-slot .strip span{ height:1.2em; line-height:1.2em; text-align:center; }
+.digit-static{ font-family:"Space Mono", ui-monospace, monospace; }
+
+/* =========================================================================
+   SEARCH — tricolor focus underline
+   ========================================================================= */
+.search-group{ position:relative; }
+.search-group::after{
+  content:"";
+  position:absolute; left:0; right:0; bottom:-4px; height:3px;
+  background: linear-gradient(90deg, var(--saffron), #fff 48%, var(--india-green));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .4s cubic-bezier(.22,1,.36,1);
+  border-radius: 2px;
+}
+.search-group:focus-within::after{ transform: scaleX(1); }
+
+.search-group button{ position:relative; overflow:hidden; }
+
+/* ink-stamp ripple spawned by JS on search click */
+.ink-stamp{
+  position:fixed;
+  width:10px; height:10px;
+  border-radius:50%;
+  pointer-events:none;
+  transform: translate(-50%,-50%) scale(1);
+  border:2px solid var(--ink-navy);
+  box-shadow: 0 0 0 2px rgba(22,33,62,.25) inset;
+  z-index:2147483000;
+  animation: inkSpread .55s ease-out forwards;
+}
+@keyframes inkSpread{
+  0%{ transform: translate(-50%,-50%) scale(.4) rotate(-12deg); opacity:.9; }
+  60%{ opacity:.55; }
+  100%{ transform: translate(-50%,-50%) scale(9) rotate(4deg); opacity:0; }
+}
+
+/* =========================================================================
+   LOADING — airmail flight path instead of a generic spinner
+   ========================================================================= */
+.loading-wrap{ gap:.75rem; }
+.mail-flight{
+  position:relative;
+  width: 220px; height: 70px;
+}
+.mail-flight svg{ position:absolute; inset:0; }
+.flight-path{
+  fill:none;
+  stroke: currentColor;
+  color: #f87171;
+  opacity:.55;
+  stroke-width:2;
+  stroke-dasharray:6 8;
+}
+.flight-envelope{
+  position:absolute; top:0; left:0;
+  width:30px; height:22px;
+  animation: flyRoute 1.6s ease-in-out infinite;
+}
+@keyframes flyRoute{
+  0%{   left:0%;   top:60%; transform: rotate(-6deg) scale(.9); }
+  25%{  left:25%;  top:5%;  transform: rotate(4deg) scale(1); }
+  50%{  left:50%;  top:55%; transform: rotate(-4deg) scale(1.05); }
+  75%{  left:75%;  top:8%;  transform: rotate(5deg) scale(1); }
+  100%{ left:100%; top:55%; transform: rotate(-6deg) scale(.9); }
+}
+.loading-text{
+  font-size:.85rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  opacity:.7;
+}
+@media (prefers-reduced-motion: reduce){
+  .flight-envelope{ animation: none; left:50%; top:50%; }
+}
+
+/* =========================================================================
+   RESULT CARDS — sorted into pigeonholes, perforated like a torn stamp
+   ========================================================================= */
+#result .stamp-card{
+  position:relative !important;
+  background: var(--paper) !important;
+  margin-top:14px;
+}
+.stamp-card::before{
+  content:"";
+  position:absolute; top:-8px; left:10px; right:10px; height:14px;
+  background-image: radial-gradient(circle 6px, var(--page-bg) 6px, transparent 6.4px);
+  background-size: 18px 100%;
+  background-repeat: repeat-x;
+  pointer-events:none;
+}
+#result .stamp-card{ transition: transform .25s cubic-bezier(.22,1,.36,1), box-shadow .25s ease !important; }
+#result .stamp-card:hover{
+  box-shadow: var(--card-shadow) !important;
+  transform: translateY(-6px) rotate(var(--tilt,-1deg)) scale(1.015) !important;
+  z-index:5;
+}
+.stamp-card:nth-child(odd){ --tilt: -1.1deg; }
+.stamp-card:nth-child(even){ --tilt: 1.1deg; }
+
+@media (prefers-reduced-motion: no-preference){
+  .stamp-card-enter{
+    animation: sortDrop .55s cubic-bezier(.22,1.4,.36,1) both;
+  }
+}
+@keyframes sortDrop{
+  0%{ opacity:0; transform: translateY(-28px) rotate(-4deg); }
+  70%{ opacity:1; transform: translateY(3px) rotate(1deg); }
+  100%{ opacity:1; transform: translateY(0) rotate(0deg); }
+}
+
+/* =========================================================================
+   EXPORT BUTTON — wax-seal press ripple (reuses ink-stamp visuals)
+   ========================================================================= */
+.export-btn{ position:relative; overflow:hidden; transition: transform .2s ease; }
+.export-btn:active{ transform: scale(.96); }
+
+/* =========================================================================
+   DARK MODE — smooth crossfade + ambient night sky for night-delivery feel
+   ========================================================================= */
+body, header, footer, .bg-white, input, select{
+  transition: background-color .45s ease, color .45s ease, border-color .45s ease;
+}
+
+#star-field{
+  position:fixed; inset:0; pointer-events:none; z-index:0;
+  opacity:0; transition: opacity .6s ease;
+}
+.dark-mode #star-field{ opacity:1; }
+#star-field span{
+  position:absolute;
+  width:2px; height:2px;
+  background:#fff;
+  border-radius:50%;
+}
+@media (prefers-reduced-motion: no-preference){
+  #star-field span{ animation: twinkle 3s ease-in-out infinite; }
+}
+@keyframes twinkle{ 0%,100%{ opacity:.15; } 50%{ opacity:.9; } }
+
+/* =========================================================================
+   FOOTER — tricolor ribbon with a slowly turning Ashoka Chakra
+   ========================================================================= */
+.footer-postal{ position:relative; }
+.tricolor-ribbon{
+  position:absolute; inset:0;
+  background: linear-gradient(180deg, var(--saffron) 0 33%, #fff 33% 67%, var(--india-green) 67% 100%);
+  opacity:.16;
+}
+.chakra{
+  position:absolute; right:6%; top:50%;
+  transform: translateY(-50%);
+  width:46px; height:46px;
+  opacity:.5;
+}
+@media (prefers-reduced-motion: no-preference){
+  .chakra{ animation: spinSlow 16s linear infinite; }
+}
+@keyframes spinSlow{ to{ transform: translateY(-50%) rotate(360deg); } }
+
+@media (max-width: 640px){
+  .stamp-frame{ padding: 2.25rem 1.1rem 1.75rem; }
+  .stamp-corner{ font-size:.52rem; letter-spacing:.12em; }
+  .mail-flight{ width:160px; height:56px; }
+  .chakra{ width:32px; height:32px; right:4%; }
+}
+
