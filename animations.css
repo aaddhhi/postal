@@ -71,15 +71,11 @@ header::after{
 .hero-stamp-section{ position:relative; }
 
 .stamp-frame{
-  position:relative;
-  max-width: 760px;
-  width:100%;
-  background: rgba(255,255,255,.13);
-  backdrop-filter: blur(2px);
-  border: 2px dashed rgba(255,255,255,.65);
-  border-radius: 6px;
-  padding: 2.75rem 2rem 2.25rem;
-  margin: .5rem auto 1.25rem;
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    padding: 30px 20px;
+    margin: 0 auto;
 }
 
 /* perforation — top & bottom (horizontal rows of punched holes) */
@@ -336,3 +332,17 @@ body, header, footer, .bg-white, input, select{
   .chakra{ width:32px; height:32px; right:4%; }
 }
 
+@media (max-width: 640px){
+
+    .stamp-frame{
+        padding: 15px;
+        min-height: auto !important;
+        height: auto !important;
+    }
+
+    .hero-stamp-section{
+        padding-top: 10px !important;
+        padding-bottom: 10px !important;
+    }
+
+}
