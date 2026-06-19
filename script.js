@@ -4,6 +4,8 @@ const resultCount = document.getElementById("resultCount");
 
 let allPostOffices = [];
 
+
+
 /* -------------------- Loading -------------------- */
 
 function showLoading() {

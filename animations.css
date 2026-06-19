@@ -35,16 +35,17 @@
 /* =========================================================================
    HEADER — quiet supporting motion: soft entrance + perforated hem
    ========================================================================= */
-header{ position: relative; overflow: visible; }
-header h1{ font-family: "Big Shoulders Stencil","Arial Narrow",sans-serif; letter-spacing:.02em; }
+header{
+    position: relative;
+}
 
-header::after{
-  content:"";
-  position:absolute; left:0; right:0; bottom:-7px; height:14px;
-  background-image: radial-gradient(circle 6px, var(--page-bg) 6px, transparent 6.4px);
-  background-size: 18px 100%;
-  background-repeat: repeat-x;
-  pointer-events:none;
+header .container > div{
+    border: 3px solid rgba(255,255,255,0.8);
+    border-radius: 12px;
+    padding: 12px 20px;
+    position: relative;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(4px);
 }
 
 @media (prefers-reduced-motion: no-preference){
@@ -141,8 +142,7 @@ header::after{
    STAT CARDS — split-flap / odometer digits
    ========================================================================= */
 .stat-card{
-  opacity:0; transform: translateY(18px);
-  transition: opacity .55s ease, transform .55s cubic-bezier(.22,1,.36,1);
+  opacity:1; transform:none;
 }
 .stat-card.in-view{ opacity:1; transform:translateY(0); }
 
